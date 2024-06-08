@@ -1,4 +1,4 @@
-import { getAllEvents } from "@/lib/queries";
+import { getAllEvents } from "../../lib/queries";
 import EventCard from "./EventCard"
 
 const EventList = async () => {

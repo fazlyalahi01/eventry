@@ -1,5 +1,11 @@
-import { replaceMongoIdInArray, replaceMongoIdInObject } from "@/utils/data-util";
 import { eventModel } from "../models/event-model";
+import {userModel} from "../models/user-model"
+import { replaceMongoIdInArray, replaceMongoIdInObject } from "../utils/data-util";
+
+async function upsertUser(user) {
+    console.log(user, "user from query");
+    return await userModel.create(user);
+}
 
 async function getAllEvents() {
     const allEvents = await eventModel.find().lean();
@@ -13,5 +19,6 @@ async function getEventById(eventId) {
 
 export {
     getAllEvents,
-    getEventById
+    getEventById,
+    upsertUser
 }

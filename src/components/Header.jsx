@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
+const Header = () => {
   return (
     <nav>
       <div className="container flex justify-between items-center p-4">
@@ -17,6 +17,7 @@ const Navbar = () => {
         </div>
 
         <ul className="flex gap-4 text-[#9C9C9C]">
+          <Link href={"/login"}>Login</Link>
           <li>About</li>
           <li>Contact Us</li>
         </ul>
@@ -25,4 +26,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;
