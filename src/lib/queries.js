@@ -1,15 +1,26 @@
 import { eventModel } from "../models/event-model";
-import {userModel} from "../models/user-model"
+import { userModel } from "../models/user-model"
 import { replaceMongoIdInArray, replaceMongoIdInObject } from "../utils/data-util";
 
-async function upsertUser(user) {
-    console.log(user, "user from query");
-    return await userModel.create(user);
+async function upsertNewUser(user) {
+    const existingUser = await userModel.findOne({ email: user.email });
+    console.log(existingUser, "existing user");
+    if (existingUser) {
+        throw new Error("user already exist with this email")
+    }
+    else {
+        return await userModel.create(user);
+    }
 }
 
 async function getAllEvents() {
-    const allEvents = await eventModel.find().lean();
-    return replaceMongoIdInArray(allEvents);
+    try {
+        const allEvents = await eventModel.find().lean();
+        console.log(allEvents, "all events");
+        return replaceMongoIdInArray(allEvents);
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function getEventById(eventId) {
@@ -20,5 +31,5 @@ async function getEventById(eventId) {
 export {
     getAllEvents,
     getEventById,
-    upsertUser
+    upsertNewUser
 }

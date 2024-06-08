@@ -1,6 +1,7 @@
 'use server'
 
-import { upsertUser } from "/src/lib/queries";
+import { redirect } from "next/navigation";
+import {upsertNewUser} from "../lib/queries"
 
 async function handleSubmitRegistration(formData) {
     const name = formData.get("name");
@@ -16,8 +17,9 @@ async function handleSubmitRegistration(formData) {
         phone,
         bio
     }
-    await upsertUser(registerData);      
-    console.log(registerData);
+    const userCreated = await upsertNewUser(registerData);
+
+    redirect("/login")
 
 }
 async function handleSubmitLogin(formData) {
