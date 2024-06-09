@@ -1,7 +1,7 @@
 'use server'
 
 import { redirect } from "next/navigation";
-import {upsertNewUser} from "../lib/queries"
+import { findUserByCredentials, upsertNewUser } from "../lib/queries"
 
 async function handleSubmitRegistration(formData) {
     const name = formData.get("name");
@@ -22,20 +22,20 @@ async function handleSubmitRegistration(formData) {
     redirect("/login")
 
 }
-async function handleSubmitLogin(formData) {
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    const loginData = {
-        email,
-        password
+async function performLogin(formData) {
+    try {
+        const credential = {};
+        credential.email = formData.get("email");
+        credential.password = formData.get("password");
+        const found = await findUserByCredentials(credential);
+        return found;
+    } catch (error) {
+        throw error;
     }
-    console.log(loginData);
-
 }
 
 
 export {
-    handleSubmitLogin,
+    performLogin,
     handleSubmitRegistration
 }

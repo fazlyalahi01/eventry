@@ -1,44 +1,54 @@
-"use client"
+'use client'
 
-import React from "react";
-import { fetchLoginUser } from "../../lib/queries"
+import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+import { performLogin } from '../../actions';
 
 export const LoginForm = () => {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const handleSubmitLogin = async (event) => {
+    const [error, setError] = useState("");
+
+    const router = useRouter();
+
+    async function onSubmit(event) {
         event.preventDefault();
-        const credentials = {
-            email: email,
-            password: password
-        };
-
-        console.log(credentials);
-
         try {
-            const user = await fetchLoginUser(credentials);
-            console.log(user);
-        } catch (error) {
+            const formData = new FormData(event.currentTarget);
+            const found = await performLogin(formData)
 
+            if (found) {
+                router.push('/');
+            } else {
+                setError('Please provide a valid login credential');
+            }
+        } catch (err) {
+            setError(err.message);
         }
     }
-    return (
-        <form className="login-form" onSubmit={handleSubmitLogin}>
-            <div>
-                <label htmlFor="email">Email Address</label>
-                <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div>
-                <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} />
-            </div>
 
-            <button
-                type="submit"
-                className="btn-primary w-full mt-4 bg-indigo-600 hover:bg-indigo-800"
-            >
-                Login
-            </button>
-        </form>
+    return (
+        <>
+            <div className="my-2 text-red-500">
+                {error}
+            </div>
+            <form className="login-form" onSubmit={onSubmit}>
+                <div>
+                    <label htmlFor="email">Email Address</label>
+                    <input type="email" name="email" id="email" />
+                </div>
+
+                <div>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" name="password" id="password" />
+                </div>
+
+                <button
+                    type="submit"
+                    className="btn-primary w-full mt-4 bg-indigo-600 hover:bg-indigo-800"
+                >
+                    Login
+                </button>
+            </form>
+        </>
     );
-}
+};
