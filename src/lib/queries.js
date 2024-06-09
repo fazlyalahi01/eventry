@@ -13,10 +13,20 @@ async function upsertNewUser(user) {
     }
 }
 
+async function fetchLoginUser(credentials) {
+    console.log(credentials, "credentials from action");
+    const user = await userModel.findOne(credentials);
+    console.log(user, "user from action");
+    if (user) {
+        return user;
+    } else {
+        throw new Error("User not found")
+    }
+}
+
 async function getAllEvents() {
     try {
         const allEvents = await eventModel.find().lean();
-        console.log(allEvents, "all events");
         return replaceMongoIdInArray(allEvents);
     } catch (error) {
         console.error(error);
@@ -31,5 +41,6 @@ async function getEventById(eventId) {
 export {
     getAllEvents,
     getEventById,
-    upsertNewUser
+    upsertNewUser,
+    fetchLoginUser
 }
