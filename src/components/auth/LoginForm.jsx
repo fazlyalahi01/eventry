@@ -4,19 +4,22 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { performLogin } from '../../actions';
+import { useAuth } from '../../hooks/useAuth';
 
 export const LoginForm = () => {
     const [error, setError] = useState("");
+    const { setAuth } = useAuth();
 
     const router = useRouter();
 
     async function onSubmit(event) {
         event.preventDefault();
         try {
-            const formData = new FormData(event.currentTarget);
+            const formData = new FormData(event.target);
             const found = await performLogin(formData)
 
             if (found) {
+                setAuth(found)
                 router.push('/');
             } else {
                 setError('Please provide a valid login credential');

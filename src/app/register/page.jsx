@@ -12,7 +12,7 @@ const RegisterPage = () => {
 
                     <span class="text-center text-xs text-gray-500">
                         Already have an account?
-                        <a class="underline hover:text-indigo-600" href="./login.html"
+                        <a class="underline hover:text-indigo-600" href="/login"
                         >Login</a>
                     </span>
                 </div>

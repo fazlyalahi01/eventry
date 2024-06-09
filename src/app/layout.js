@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
-import "../styles/global.css";
 import dbConnect from "../../dbConnect/dbConnect";
 import Header from "../components/Header";
+import AuthProvider from "../providers/AuthProvider";
+import "../styles/global.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +16,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        <main>
+        <AuthProvider>
+          <Header />
+          <main>
             {children}
-        </main>
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

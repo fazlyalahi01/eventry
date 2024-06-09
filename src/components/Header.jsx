@@ -1,6 +1,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import SignInOut from "./auth/SignInOut";
 
 const Header = () => {
   return (
@@ -17,7 +18,7 @@ const Header = () => {
         </div>
 
         <ul className="flex gap-4 text-[#9C9C9C]">
-          <Link href={"/login"}>Login</Link>
+          <SignInOut />
           <li>About</li>
           <li>Contact Us</li>
         </ul>
