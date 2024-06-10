@@ -1,7 +1,8 @@
 'use server'
 
 import { redirect } from "next/navigation";
-import { findUserByCredentials, upsertNewUser } from "../lib/queries"
+import { findUserByCredentials, updateInterest, upsertNewUser } from "../lib/queries"
+import { revalidatePath } from "next/cache";
 
 async function handleSubmitRegistration(formData) {
     const name = formData.get("name");
@@ -17,7 +18,7 @@ async function handleSubmitRegistration(formData) {
         phone,
         bio
     }
-    const userCreated = await upsertNewUser(registerData);
+  await upsertNewUser(registerData);
 
     redirect("/login")
 
@@ -34,8 +35,19 @@ async function performLogin(formData) {
     }
 }
 
+async function toggleInterestButton(authId, eventId) {    
+    try {
+        await updateInterest(authId, eventId)
+    } catch (error) {
+        throw error
+    }
+
+    revalidatePath("/")
+}
+
 
 export {
     performLogin,
-    handleSubmitRegistration
+    handleSubmitRegistration, 
+    toggleInterestButton
 }

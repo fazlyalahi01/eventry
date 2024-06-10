@@ -12,19 +12,19 @@ const SignInOut = () => {
         router.push('/login')
     }
 
-  return (
-    <div>
-        {
-            auth ? (
-                <>
-                    <span className="mx-2">Hello, {auth?.name}</span>
-                    <span className="mx-1">|</span>
-                    <a className="cursor-pointer" onClick={logout}>Logout</a>
-                </>
-            ) : (<Link href="/login">Login</Link>)
-        }
-    </div>
-  )
+    return (
+        <div>
+            {
+                auth ? (
+                    <>
+                        <span >Hello, {auth?.name}</span>
+                        <span className="mx-2">|</span>
+                        <a className="cursor-pointer text-red-500" onClick={logout}>Logout</a>
+                    </>
+                ) : (<Link href="/login">Login</Link>)
+            }
+        </div>
+    )
 }
 
 export default SignInOut

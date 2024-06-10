@@ -1,3 +1,4 @@
+import mongoose, { Mongoose } from "mongoose";
 import { eventModel } from "../models/event-model";
 import { userModel } from "../models/user-model"
 import { replaceMongoIdInArray, replaceMongoIdInObject } from "../utils/data-util";
@@ -35,9 +36,44 @@ async function getEventById(eventId) {
     return replaceMongoIdInObject(event);
 }
 
+
+async function updateInterest(eventId, authId) {
+
+    const event = await eventModel.findById(eventId);
+
+    if (event) {
+        const foundUsers = event.interested_ids.find(id => id.toString() === authId);
+
+        if (foundUsers) {
+            event.interested_ids.pull(new mongoose.Types.ObjectId(authId));
+        } else {
+            event.interested_ids.push(new mongoose.Types.ObjectId(authId));
+        }
+
+        event.save();
+    }
+}
+
+// async function updateInterest(eventId, authId) {
+//     const event = eventModel.findById(eventId);
+//     console.log(event);
+//     if (event) {
+//         const foundUser = event.interested_ids?.find(id => id.toString() === authId);
+//         if (foundUser) {
+//             event.interested_ids.pull(new mongoose.Types.ObjectId(authId));
+//         } else {
+//             event.interested_ids.push(new mongoose.Types.ObjectId(authId));
+
+//         }
+//     }
+
+//     event.save();
+// }
+
 export {
     getAllEvents,
     getEventById,
     upsertNewUser,
-    findUserByCredentials
+    findUserByCredentials,
+    updateInterest
 }
