@@ -1,8 +1,10 @@
 'use server'
-
+// server actions file
 import { redirect } from "next/navigation";
-import { findUserByCredentials, updateInterest, upsertNewUser } from "../lib/queries"
+import { findUserByCredentials, getEventById, updateGoing, updateInterest, upsertNewUser } from "../lib/queries"
 import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
+import EmailTemplate from "../components/payments/EmailTemplate"
 
 async function handleSubmitRegistration(formData) {
     const name = formData.get("name");
@@ -18,7 +20,7 @@ async function handleSubmitRegistration(formData) {
         phone,
         bio
     }
-  await upsertNewUser(registerData);
+    await upsertNewUser(registerData);
 
     redirect("/login")
 
@@ -35,7 +37,7 @@ async function performLogin(formData) {
     }
 }
 
-async function toggleInterestButton(authId, eventId) {    
+async function toggleInterestButton(authId, eventId) {
     try {
         await updateInterest(authId, eventId)
     } catch (error) {
@@ -46,8 +48,39 @@ async function toggleInterestButton(authId, eventId) {
 }
 
 
+async function handleGoingButton(eventId, user) {
+    try {
+        await updateGoing(eventId, user?.id);
+        await sendEmail(eventId, user);
+
+    } catch (error) {
+        throw error;
+    }
+    revalidatePath('/');
+    redirect('/');
+}
+
+async function sendEmail(eventId, user) {
+    try {
+        console.log(eventId, user, process.env.RESEND_API_KEY);
+        const event = await getEventById(eventId);
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const message = `Dear ${user?.name}, you have been successfully registered for the event, ${event?.name}. Please carry this email and your official id to the venue. We are excited to have you here.`;
+        const sent = await resend.emails.send({
+            from: 'Eventry - Registration Successfull <onboarding@resend.dev>',
+            to: user?.email,
+            subject: "Successfully Registered for the event!",
+            react: EmailTemplate({ message })
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     performLogin,
-    handleSubmitRegistration, 
-    toggleInterestButton
+    handleSubmitRegistration,
+    toggleInterestButton,
+    handleGoingButton,
+    sendEmail
 }

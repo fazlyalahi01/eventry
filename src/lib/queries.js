@@ -54,6 +54,14 @@ async function updateInterest(eventId, authId) {
     }
 }
 
+async function updateGoing(eventId, authId) {
+    const event = await eventModel.findById(eventId);
+    const found = event.going_ids.find(id => id.toString() === authId)
+    if (found) return;
+    event.going_ids.push(new mongoose.Types.ObjectId(authId));
+    event.save();
+}
+
 // async function updateInterest(eventId, authId) {
 //     const event = eventModel.findById(eventId);
 //     console.log(event);
@@ -75,5 +83,6 @@ export {
     getEventById,
     upsertNewUser,
     findUserByCredentials,
-    updateInterest
+    updateInterest,
+    updateGoing
 }
