@@ -43,7 +43,6 @@ async function toggleInterestButton(authId, eventId) {
     } catch (error) {
         throw error
     }
-
     revalidatePath("/")
 }
 

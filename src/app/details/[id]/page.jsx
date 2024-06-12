@@ -16,7 +16,8 @@ export async function generateMetadata({params: {id}}) {
 }
 
 const EventDetailsPage = async ({ params: { id } }) => {
-  const event = await getEventById(id)
+  const event = await getEventById(id);     
+  
   return (
     <>
       <HeroSection event={event} />
