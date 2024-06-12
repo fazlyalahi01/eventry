@@ -22,9 +22,10 @@ async function findUserByCredentials(credentials) {
     return null;
 }
 
-async function getAllEvents() {
+async function getAllEvents(query) {
     try {
-        const allEvents = await eventModel.find().lean();
+        const regx = new RegExp(query, 'i');
+        const allEvents = await eventModel.find({ name: regx }).lean();
         return replaceMongoIdInArray(allEvents);
     } catch (error) {
         console.error(error);
