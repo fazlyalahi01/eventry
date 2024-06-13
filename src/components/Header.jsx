@@ -9,11 +9,12 @@ const Header = () => {
       <div className="container flex justify-between items-center p-4">
         <div className="nav-brand">
           <Link href="/">
-            <Image
+            {/* <Image
               src="/images/logo.svg"
               alt="Eventry"
               width={135}
-              height={135} />
+              height={135} /> */}
+            <p className="text-3xl font-bold text-blue-500">Eventry</p>
           </Link>
         </div>
 

@@ -12,7 +12,7 @@ const EventCard = ({ event }) => {
         alt={event?.name}
         className="w-full"
         width={500}
-        height={500}
+        height={500}        
       />
 
       <div className="p-3">
